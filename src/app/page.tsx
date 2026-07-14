@@ -22,6 +22,10 @@ interface Banner {
   _id: string;
   title: string;
   subtitle?: string;
+  description?: string;
+  ctaText?: string;
+  secondaryCtaText?: string;
+  secondaryCtaLink?: string;
   image: { desktop: string; mobile: string };
   link?: string;
   position: string;
@@ -48,11 +52,15 @@ function HeroSection({ banners, loading }: { banners: Banner[]; loading: boolean
   const fallback: Banner = {
     _id: 'default',
     title: 'Designed for Detours',
-    subtitle: 'Considered, durable goods for every kind of trip — from the weekend watering hole to exploring a new city.',
+    subtitle: 'The New Arrivals',
+    description: 'Considered, durable goods for every kind of trip — from the weekend watering hole to exploring a new city.',
     image: { desktop: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=2000&q=80', mobile: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=800&q=80' },
     link: '/search?sort=newest',
     position: 'hero',
     priority: 0,
+    ctaText: 'Shop Now',
+    secondaryCtaText: 'Explore Collections',
+    secondaryCtaLink: '/categories',
   };
 
   const slides = banners.length > 0 ? banners : [fallback];
@@ -77,9 +85,13 @@ function HeroSection({ banners, loading }: { banners: Banner[]; loading: boolean
 
   const banner = slides[activeIndex];
   const title = banner.title;
-  const subtitle = banner.subtitle ?? '';
+  const tag = banner.subtitle ?? 'The New Arrivals';
+  const description = banner.description ?? '';
   const heroImage = banner.image?.desktop ?? fallback.image.desktop;
   const ctaHref = banner.link ?? '/search?sort=newest';
+  const ctaText = banner.ctaText ?? 'Shop Now';
+  const secondaryCtaText = banner.secondaryCtaText ?? 'Explore Collections';
+  const secondaryCtaLink = banner.secondaryCtaLink ?? '/categories';
 
   return (
     <section ref={ref} className="relative h-[88vh] min-h-[560px] overflow-hidden bg-forest-deep">
@@ -122,17 +134,19 @@ function HeroSection({ banners, loading }: { banners: Banner[]; loading: boolean
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.6, ease: 'easeOut' }}
               >
-                <span className="eyebrow text-sand/80">
-                  The New Arrivals
-                </span>
+                {tag && (
+                  <span className="eyebrow text-sand/80">
+                    {tag}
+                  </span>
+                )}
 
                 <h1 className="mt-4 font-serif text-5xl font-semibold leading-[0.98] tracking-tight text-sand sm:text-6xl lg:text-7xl">
                   {title}
                 </h1>
 
-                {subtitle && (
+                {description && (
                   <p className="mt-6 max-w-md text-base leading-relaxed text-sand/85 sm:text-lg">
-                    {subtitle}
+                    {description}
                   </p>
                 )}
 
@@ -141,15 +155,17 @@ function HeroSection({ banners, loading }: { banners: Banner[]; loading: boolean
                     href={ctaHref}
                     className="group inline-flex items-center justify-center gap-2 rounded-sm bg-sand px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.14em] text-forest-deep transition-all duration-300 hover:bg-white"
                   >
-                    Shop Now
+                    {ctaText}
                     <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
-                  <Link
-                    href="/categories"
-                    className="inline-flex items-center justify-center gap-2 rounded-sm border border-sand/40 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.14em] text-sand transition-all duration-300 hover:border-sand hover:bg-sand/10"
-                  >
-                    Explore Collections
-                  </Link>
+                  {secondaryCtaText && (
+                    <Link
+                      href={secondaryCtaLink}
+                      className="inline-flex items-center justify-center gap-2 rounded-sm border border-sand/40 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.14em] text-sand transition-all duration-300 hover:border-sand hover:bg-sand/10"
+                    >
+                      {secondaryCtaText}
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             </AnimatePresence>
